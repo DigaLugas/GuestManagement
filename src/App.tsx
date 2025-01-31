@@ -64,20 +64,6 @@ export default function App() {
         }
     };
 
-    const handleExportCSV = () => {
-        const header = 'Nome Completo,Confirmado\n';
-        const rows = guests.map(guest => 
-            `${guest.full_name},${guest.confirmed ? 'Sim' : 'Não'}`
-        ).join('\n');
-        const csvContent = header + rows;
-        
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'lista_convidados.csv';
-        link.click();
-    };
-
     const startEditing = (guest: Guest) => {
         setEditingId(guest.id!);
         setEditName(guest.full_name);
@@ -107,6 +93,20 @@ export default function App() {
             console.error('Erro ao atualizar convidado:', error);
             alert('Erro ao atualizar convidado!');
         }
+    };
+
+    const handleExportCSV = () => {
+        const header = 'Nome Completo,Confirmado\n';
+        const rows = guests.map(guest => 
+            `${guest.full_name},${guest.confirmed ? 'Sim' : 'Não'}`
+        ).join('\n');
+        const csvContent = header + rows;
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'lista_convidados.csv';
+        link.click();
     };
 
     return (
@@ -177,7 +177,7 @@ export default function App() {
                                             type="text"
                                             value={editName}
                                             onChange={(e) => setEditName(e.target.value)}
-                                            className="w-full p-1 border rounded"
+                                            className="w-full p-2 border rounded"
                                         />
                                     ) : (
                                         guest.full_name
@@ -185,39 +185,36 @@ export default function App() {
                                 </td>
                                 <td className="border p-2">
                                     {editingId === guest.id ? (
-                                        <label className="flex items-center justify-center">
-                                            <input
-                                                type="checkbox"
-                                                checked={editConfirmed}
-                                                onChange={(e) => setEditConfirmed(e.target.checked)}
-                                                className="mr-2"
-                                            />
-                                            Confirmado
-                                        </label>
+                                        <input
+                                            type="checkbox"
+                                            checked={editConfirmed}
+                                            onChange={(e) => setEditConfirmed(e.target.checked)}
+                                            className="mr-2"
+                                        />
                                     ) : (
                                         guest.confirmed ? 'Sim' : 'Não'
                                     )}
                                 </td>
-                                <td className="border p-2 text-center">
+                                <td className="border p-2">
                                     {editingId === guest.id ? (
-                                        <div className="flex justify-center gap-2">
+                                        <>
                                             <button
                                                 onClick={() => saveEdit(guest.id!)}
-                                                className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 text-sm"
+                                                className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 mr-2"
                                             >
                                                 Salvar
                                             </button>
                                             <button
                                                 onClick={cancelEditing}
-                                                className="bg-gray-500 text-white px-2 py-1 rounded hover:bg-gray-600 text-sm"
+                                                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                                             >
                                                 Cancelar
                                             </button>
-                                        </div>
+                                        </>
                                     ) : (
                                         <button
                                             onClick={() => startEditing(guest)}
-                                            className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 text-sm"
+                                            className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
                                         >
                                             Editar
                                         </button>
